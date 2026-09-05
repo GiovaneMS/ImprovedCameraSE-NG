@@ -1,6 +1,6 @@
 [submodule "ImprovedCamera/vendor/CommonLibSSE-NG"]
 	path = ImprovedCamera/vendor/CommonLibSSE-NG
-	url = https://github.com/ArranzCNL/CommonLibSSE-NG
+	url = https://github.com/GiovaneMS/CommonLibSSE-NG
 	branch = flatrim
 [submodule "ImprovedCamera/vendor/mINI"]
 	path = ImprovedCamera/vendor/mINI
