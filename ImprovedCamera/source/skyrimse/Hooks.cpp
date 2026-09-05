@@ -614,7 +614,13 @@ namespace Patch {
 			0x7A :
 			REL::VariantOffset(0x7C, 0x7B, 0).offset();
 		Address::Hook::TESObjectCell_Get3D = REL::RelocationID(18683, 19165).address() + tesObjectCellOffset;
-		Address::Hook::SmoothAnimationTransitions = REL::RelocationID(40937, 41996).address() + REL::VariantOffset(0x2EA, 0x2F4, 0).offset();
+		// Same 1-byte AE layout shift as TESObjectCell_Get3D above: in 1.7.104
+		// the "0f 84 ..." (je near) that needs replacing starts at +0x2F3, not +0x2F4.
+		const std::size_t smoothAnimOffset =
+			(pluginSkyrimSEForOffset->Build() == SkyrimSE::BuildInfo::k17104) ?
+			0x2F3 :
+			REL::VariantOffset(0x2EA, 0x2F4, 0).offset();
+		Address::Hook::SmoothAnimationTransitions = REL::RelocationID(40937, 41996).address() + smoothAnimOffset;
 		Address::Hook::ShaderReferenceEffect1 = REL::RelocationID(34111, 34913).address() + REL::VariantOffset(0xE1, 0xE1, 0).offset();
 		Address::Hook::ShaderReferenceEffect2 = REL::RelocationID(34111, 34913).address() + REL::VariantOffset(0x18A, 0x1F5, 0).offset();
 		Address::Hook::GetEffectNode_IsThirdPerson = REL::RelocationID(33361, 34142).address() + REL::VariantOffset(0x51, 0x51, 0).offset();
