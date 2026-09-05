@@ -603,7 +603,17 @@ namespace Patch {
 		Address::Hook::UpdateSwitchPOV = REL::RelocationID(39401, 40476).address() + REL::VariantOffset(0x2AF, 0x294, 0).offset();
 		Address::Hook::UpdateCamera = REL::RelocationID(49852, 50784).address() + 0x1A6;
 		Address::Hook::UpdateFirstPerson = REL::RelocationID(39446, 40522).address() + 0xD7;
-		Address::Hook::TESObjectCell_Get3D = REL::RelocationID(18683, 19165).address() + REL::VariantOffset(0x7C, 0x7B, 0).offset();
+		// In 1.7.104 (and likely 1.7.99+) the AE function layout for this
+		// call site shifted by 1 byte vs the older AE builds (0x6640/0x161179)
+		// this offset was originally captured against. Patching at the old
+		// +0x7B offset lands mid-instruction on the "call qword ptr [rax+X]"
+		// at +0x7A, corrupting it and crashing on cell load (EXCEPTION_ILLEGAL_INSTRUCTION).
+		auto pluginSkyrimSEForOffset = DLLMain::Plugin::Get()->SkyrimSE();
+		const std::size_t tesObjectCellOffset =
+			(pluginSkyrimSEForOffset->Build() == SkyrimSE::BuildInfo::k17104) ?
+			0x7A :
+			REL::VariantOffset(0x7C, 0x7B, 0).offset();
+		Address::Hook::TESObjectCell_Get3D = REL::RelocationID(18683, 19165).address() + tesObjectCellOffset;
 		Address::Hook::SmoothAnimationTransitions = REL::RelocationID(40937, 41996).address() + REL::VariantOffset(0x2EA, 0x2F4, 0).offset();
 		Address::Hook::ShaderReferenceEffect1 = REL::RelocationID(34111, 34913).address() + REL::VariantOffset(0xE1, 0xE1, 0).offset();
 		Address::Hook::ShaderReferenceEffect2 = REL::RelocationID(34111, 34913).address() + REL::VariantOffset(0x18A, 0x1F5, 0).offset();

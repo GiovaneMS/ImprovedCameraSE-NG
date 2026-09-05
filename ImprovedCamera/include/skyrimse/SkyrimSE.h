@@ -29,6 +29,7 @@ namespace Patch {
 				k16659 = 4,  // GOG
 				k161130 = 5,
 				k161179 = 6, // GOG
+				k17104 = 7,  // 1.7.99+ (function layout shifted vs older AE builds)
 
 				kNewer,
 
